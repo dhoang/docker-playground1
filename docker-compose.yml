@@ -1,0 +1,42 @@
+version: '2'
+
+services:
+  httpd:
+    image: rigpa/5thunder-private:centos7-httpd.v2
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    container_name: httpd
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    links:
+      - tomcat
+  tomcat:
+    image: rigpa/5thunder-private:centos7-tomcat.v2
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    container_name: tomcat
+    expose:
+      - "8080"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    links:
+      - pg96
+  pg96:
+    image: rigpa/5thunder-private:centos7-pg96.v2
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    container_name: pg96
+    expose:
+      - "5432"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+
